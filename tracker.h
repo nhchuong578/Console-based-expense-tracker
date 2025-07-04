@@ -38,6 +38,7 @@ int tagIndexFind (char *target, char ref[][MAX_TAG_LENGTH], int tagCount);
 void tagShow();
 void tagSave();
 void tagLoad();
+void eLoad();
 void eSave();
 void cDateSave();
 void cDateLoad();
