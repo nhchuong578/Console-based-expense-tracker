@@ -15,8 +15,8 @@ typedef struct {
     } Expense;
 
 //User-defined data
-char definedTag[MAX_TAG][MAX_TAG_LENGTH];
-Expense definedE[MAX_EXPENSE];
+extern char definedTag[MAX_TAG][MAX_TAG_LENGTH];
+extern Expense definedE[MAX_EXPENSE];
 extern int cMonth;
 extern int cYear;
 
