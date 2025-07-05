@@ -6,9 +6,12 @@
 //VARIABLES
 int eCount=0;
 int tagCount=0;
-int cMonth;
-int cYear;
-
+int cMonth; //default month
+int cYear;  //default year
+int defaultDateSet = 0;
+//DEFINITION OF USER DATA
+char definedTag[MAX_TAG][MAX_TAG_LENGTH];
+Expense definedE[MAX_EXPENSE];
 //HELPER FUNCTIONS
 void wait() {
     printf("\nPress Enter to continue, just take your time...");
@@ -16,6 +19,7 @@ void wait() {
 }
 
 int validDateCheck (int day, int month, int year) {
+    // returns 0 if invalid
     //year check
     if (year<1900 || year>2169) return 0;
     int isLeap = ((year%4)==0 && (year%100)!=0) || (year%400 == 0);
@@ -50,6 +54,7 @@ int safeIntCheck(const char *message) {
 }
 
 int dateEncode(int day, int month, int year) {
+    //returns YYYYMMDD
     return year*10000 + month*100 + day;
 }
 
@@ -62,6 +67,7 @@ int dateComp(const void *a, const void *b) {
 }
 
 int tagIndexFind (char *target, char ref[][MAX_TAG_LENGTH], int tagCount) {
+    //return -1 if no tags match
     for (int i=0; i<tagCount; i++) {
         if (strcmp(target,ref[i])==0) {return i;}
     }
@@ -100,7 +106,7 @@ void tagLoad() {
     fclose(fp);
 }
 
-void eSave(){
+void eSave(){ //day, month, year, tag, money
     FILE *fp=fopen("expenses.txt","w");
     if (fp==NULL) {printf("\nExpenses failed to save"); return;}
     for (int i = 0; i < eCount; i++) {
@@ -157,12 +163,15 @@ void cDateLoad() {
     FILE *fp = fopen("date_def.txt", "r");
     if (fp==NULL) {printf("\nNo default Month and Year found\n"); return;}
     else {
-        fscanf(fp, "%d", &cMonth);
-        fscanf(fp, "%d", &cYear);
+        if (fscanf(fp, "%d", &cMonth) == 1 && fscanf(fp, "%d", &cYear) == 1 && validDateCheck(1, cMonth, cYear)) {
+            defaultDateSet = 1;
+        } else {
+            printf("\nDefault date file found, but contents are invalid\n");
+            defaultDateSet = 0;
         }
         fclose(fp);
     }
-
+}
 
 //TAG FUNCTIONS
 void addTag() {
@@ -178,11 +187,12 @@ void addTag() {
             continue;
         }
 
-        if (strcmp(tagInput,"done")==0) return;
+        if (strcmp(tagInput,"done")==0) break;
         strcpy(definedTag[tagCount],tagInput);//save Tags to the array
         tagCount++;
     }
     tagSave();
+    return;
 }
 
 void deleteTag() {
@@ -362,7 +372,8 @@ void addDefaultE () {
         printf("\n No tags available. Please set up tags first\n");
         return;
     }
-
+    //default date check
+    if(defaultDateSet == 0){printf("Error: default date has not been set"); return;}
     //Day input
     printf("--Adding new expense, press 0 to cancel");
     int day= safeIntCheck("Input day: ");
@@ -370,7 +381,7 @@ void addDefaultE () {
     if (!validDateCheck(day,cMonth,cYear)) {printf("\nInvalid date format");  return;}
     //Tag input
     tagShow();
-    int tChoice = safeIntCheck("Choose a tag (Press 0 to cancel)");
+    int tChoice = safeIntCheck("Choose a tag (Press 0 to cancel): ");
     if (tChoice<=0) return;
     if (tChoice>tagCount) return;
     //Monni input
@@ -520,7 +531,7 @@ void tagSetup(){
         printf("2.Add new tag\n");
         printf("3.Delete a Tag\n");
         printf("4.Back to main menu\n");
-        choice = safeIntCheck("Select an option");
+        choice = safeIntCheck("Select an option: ");
 
     switch (choice){
         case 1:
