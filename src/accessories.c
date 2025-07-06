@@ -60,11 +60,9 @@ int dateEncode(int day, int month, int year) {
     return year*10000 + month*100 + day;
 }
 
-int dateComp(const void *a, const void *b) {
-    const Expense *ea = (const Expense *)a;
-    const Expense *eb = (const Expense *)b;
-    int date1 = dateEncode(ea->day, ea->month, ea->year);
-    int date2 = dateEncode(eb->day, eb->month, eb->year);
+int dateComp(Expense a, Expense b) {
+    int date1 = dateEncode(a.day, a.month, a.year);
+    int date2 = dateEncode(b.day, b.month, b.year);
     return date1 - date2;
 }
 
