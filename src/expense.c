@@ -94,7 +94,7 @@ void viewRecentE() {
         }
     if (useTagFilter==1) {
         tagShow();
-        int tChoice= safeIntCheck("Choose a tag to sort (press 0 to cancel: ");
+        int tChoice= safeIntCheck("Choose a tag to sort (press 0 to cancel): ");
         if (tChoice==0 || tChoice>tagCount) return;
         strcpy(targetTag,definedTag[tChoice-1]);
     }
