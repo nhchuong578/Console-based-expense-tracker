@@ -1,6 +1,6 @@
 #ifndef TAGS_H
 #define TAGS_H
-#define MAX_TAG_LENGTH 256
+#define MAX_TAG_LENGTH 256 //max length for name of tag
 int tagIndexFind (char *target, char ref[][MAX_TAG_LENGTH], int tagCount);
 //Saving and loading
 void tagSave();
